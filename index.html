@@ -24,6 +24,24 @@
             padding: 8px;
             margin: 5px 0 15px;
         }
+
+        /* Drag & Drop Box */
+        .drop-zone {
+            border: 2px dashed #aaa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .drop-zone.dragover {
+            border-color: #007BFF;
+            background-color: #eef6ff;
+            color: #007BFF;
+        }
+
         .profile {
             margin-top: 20px;
             background: #e9f5ff;
@@ -36,29 +54,35 @@
             border-radius: 50%;
             margin-bottom: 10px;
         }
+
+        /* Hide actual file input */
+        #imageUpload {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Profile Generator</h1>
-    <p>Press enter after each answer</p>
 
     <form id="profileForm">
         <input type="text" id="first_name" placeholder="First Name" required>
         <input type="text" id="age" placeholder="Age">
         <input type="text" id="dob" placeholder="Date of Birth (Month)">
         <input type="text" id="season" placeholder="Favorite Season">
-        <input type="text" id="color" placeholder="Favorite Color">
+        <input type="text" id="color" placeholder="Eye Color">
         <input type="text" id="movie" placeholder="Favorite Movie/TV Show">
         <input type="text" id="holiday" placeholder="Favorite Holiday">
-        <input type="text" id="pet" placeholder=" how many pets?">
+        <input type="text" id="pet" placeholder="Do you have pets?">
         <input type="text" id="place" placeholder="Favorite Place">
         <input type="text" id="job" placeholder="Dream Job">
         <input type="text" id="house" placeholder="Dream House">
 
-        <!-- New Image Upload -->
-        <label>Upload Profile Picture:</label>
+        <!-- Drag & Drop Area -->
+        <div class="drop-zone" id="dropZone">
+            Drag & Drop Profile Picture Here or Click to Upload
+        </div>
         <input type="file" id="imageUpload" accept="image/*">
 
         <button type="button" onclick="generateProfile()">Generate Profile</button>
@@ -68,6 +92,54 @@
 </div>
 
 <script>
+let uploadedImage = null;
+
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("imageUpload");
+
+// Click to open file picker
+dropZone.addEventListener("click", () => fileInput.click());
+
+// Handle drag over
+dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.classList.add("dragover");
+});
+
+// Handle drag leave
+dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("dragover");
+});
+
+// Handle drop
+dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("dragover");
+    const file = e.dataTransfer.files[0];
+    handleFile(file);
+});
+
+// Handle manual file selection
+fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    handleFile(file);
+});
+
+// Convert image to displayable format
+function handleFile(file) {
+    if (!file || !file.type.startsWith("image/")) {
+        alert("Please upload a valid image file.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        uploadedImage = e.target.result;
+        dropZone.textContent = "Image uploaded ✔";
+    };
+    reader.readAsDataURL(file);
+}
+
 function generateProfile() {
     const firstName = document.getElementById("first_name").value;
     const age = document.getElementById("age").value;
@@ -77,45 +149,29 @@ function generateProfile() {
     const movie = document.getElementById("movie").value;
     const holiday = document.getElementById("holiday").value;
     const pet = document.getElementById("pet").value;
-    const petName = document.getElementById("pet_name").value;
     const place = document.getElementById("place").value;
     const job = document.getElementById("job").value;
     const house = document.getElementById("house").value;
 
-    const imageInput = document.getElementById("imageUpload");
-    const file = imageInput.files[0];
-
     const outputDiv = document.getElementById("output");
 
-    function displayProfile(imageSrc) {
-        outputDiv.style.display = "block";
-        outputDiv.innerHTML = `
-            ${imageSrc ? `<img src="${imageSrc}" alt="Profile Picture">` : ""}
-            <h2>Hello ${firstName}!</h2>
-            <p><strong>Age:</strong> ${age}</p>
-            <p><strong>Date of Birth (Month):</strong> ${dob}</p>
-            <p><strong>Favorite Season:</strong> ${season}</p>
-            <p><strong>Eye Color:</strong> ${color}</p>
-            <p><strong>Favorite Movie/TV Show:</strong> ${movie}</p>
-            <p><strong>Favorite Holiday:</strong> ${holiday}</p>
-            <p><strong>Pets:</strong> ${pet}</p>
-            <p><strong>Favorite Place:</strong> ${place}</p>
-            <p><strong>Dream Job:</strong> ${job}</p>
-            <p><strong>Dream House:</strong> ${house}</p>
-            <p><strong>Thank you for using this profile generator, ${firstName}!</strong></p>
-            <p>Goodbye! Have a great rest of the day!</p>
-        `;
-    }
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            displayProfile(e.target.result);
-        };
-        reader.readAsDataURL(file);
-    } else {
-        displayProfile(null);
-    }
+    outputDiv.style.display = "block";
+    outputDiv.innerHTML = `
+        ${uploadedImage ? `<img src="${uploadedImage}" alt="Profile Picture">` : ""}
+        <h2>Hello ${firstName}!</h2>
+        <p><strong>Age:</strong> ${age}</p>
+        <p><strong>Date of Birth (Month):</strong> ${dob}</p>
+        <p><strong>Favorite Season:</strong> ${season}</p>
+        <p><strong>Favorite Color:</strong> ${color}</p>
+        <p><strong>Favorite Movie/TV Show:</strong> ${movie}</p>
+        <p><strong>Favorite Holiday:</strong> ${holiday}</p>
+        <p><strong>Pets:</strong> ${pet}</p>
+        <p><strong>Favorite Place:</strong> ${place}</p>
+        <p><strong>Dream Job:</strong> ${job}</p>
+        <p><strong>Dream House:</strong> ${house}</p>
+        <p><strong>Thank you for using this profile generator, ${firstName}!</strong></p>
+        <p>Goodbye! Have a great rest of the day!</p>
+    `;
 }
 </script>
 
