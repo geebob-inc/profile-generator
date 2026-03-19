@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 10px;
+      background: #e8f0fe;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Profile Generator</h1>
+  <p>Press enter after each answer</p>
+
+  <form id="profileForm">
+    <input type="text" id="firstName" placeholder="First name" required>
+    <input type="text" id="age" placeholder="Age">
+    <input type="text" id="dob" placeholder="Date of birth (month)">
+    <input type="text" id="season" placeholder="Favorite season">
+    <input type="text" id="color" placeholder="Favorite color">
+    <input type="text" id="movie" placeholder="Favorite movie/TV show">
+    <input type="text" id="holiday" placeholder="Favorite holiday">
+    <input type="text" id="pet" placeholder="Do you have pets?">
+    <input type="text" id="petName" placeholder="Pet's name">
+    <input type="text" id="place" placeholder="Favorite place">
+    <input type="text" id="job" placeholder="Dream job">
+    <input type="text" id="house" placeholder="Dream house">
+
+    <button type="button" onclick="generateProfile()">Generate Profile</button>
+  </form>
+
+  <div class="output" id="output"></div>
+</div>
+
+<script>
+function generateProfile() {
+  const firstName = document.getElementById("firstName").value;
+  const age = document.getElementById("age").value;
+  const dob = document.getElementById("dob").value;
+  const season = document.getElementById("season").value;
+  const color = document.getElementById("color").value;
+  const movie = document.getElementById("movie").value;
+  const holiday = document.getElementById("holiday").value;
+  const pet = document.getElementById("pet").value;
+  const petName = document.getElementById("petName").value;
+  const place = document.getElementById("place").value;
+  const job = document.getElementById("job").value;
+  const house = document.getElementById("house").value;
+
+  const output = `
+    <h2>Hello ${firstName}!</h2>
+    <p>Welcome to your profile setup!</p>
+    <p><strong>Age:</strong> ${age}</p>
+    <p><strong>Date of Birth (Month):</strong> ${dob}</p>
+    <p><strong>Favorite Season:</strong> ${season}</p>
+    <p><strong>Favorite Color:</strong> ${color}</p>
+    <p><strong>Favorite Movie/TV Show:</strong> ${movie}</p>
+    <p><strong>Favorite Holiday:</strong> ${holiday}</p>
+    <p><strong>Has Pets:</strong> ${pet}</p>
+    <p><strong>Pet Name:</strong> ${petName}</p>
+    <p><strong>Favorite Place:</strong> ${place}</p>
+    <p><strong>Dream Job:</strong> ${job}</p>
+    <p><strong>Dream House:</strong> ${house}</p>
+    <p><strong>Thank you for using this profile generator, ${firstName}!</strong></p>
+    <p>Goodbye! Have a great rest of the day!</p>
+  `;
+
+  document.getElementById("output").innerHTML = output;
+}
+</script>
+
+</body>
+</html>
